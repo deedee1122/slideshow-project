@@ -1,11 +1,11 @@
-function Slideshow(id) {
+function Slideshow(id, images) {
     this.currentIndex = 0;
     this.app = document.getElementById(id);
-    
+    this.slides = [];
     if(!this.app){
       throw new Error('could not find app by id "' + id + '"')
     }
-    this.getSlides();
+    this.getSlides(images);
     
      let previousSlideBtn = this.app.querySelector(".previous");
   
@@ -18,7 +18,7 @@ function Slideshow(id) {
     previousSlideBtn.addEventListener("click", () => {
        this.previousSlide();
     });
-    
+  
      let nextSlideBtn = this.app.querySelector(".next");
   
   if (!nextSlideBtn){
@@ -32,8 +32,20 @@ function Slideshow(id) {
     });
   }
 
-  Slideshow.prototype.getSlides = function(){
-    this.slides = this.app.querySelectorAll("img")
+  Slideshow.prototype.getSlides = function(images){
+    debugger
+    if (images){
+        const container = document.createElement('div')
+        for(let i = 0; i < images.length; i++){
+            const imageURL = images[i]
+           // const SlideshowItem = new Slideshow('images',imageURL)
+            const imagesString = `<img src="${imageURL}">`
+            container.innerHTML = imagesString
+            this.slides.push(container.children[0])
+        }
+    }else{
+        this.slides = this.app.querySelectorAll("img")
+    }
   }
   
   Slideshow.prototype.nextSlide = function(){
@@ -47,7 +59,7 @@ function Slideshow(id) {
   }
     
    Slideshow.prototype.previousSlide = function(){
-     debugger
+     
       this.toggleHide(this.slides[this.currentIndex])
     this.currentIndex = this.currentIndex - 1;
   
